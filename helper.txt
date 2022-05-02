@@ -1,0 +1,141 @@
+import tkinter as tk
+
+win = tk.Tk()
+
+ДИЗАЙН ОКНА
+
+photo = tk.PhotoImage(file='name.png') - подгружаем картинку
+win.iconphoto(False, photo) - используем у себя
+# win.config(bg='blue') - первый способ задания фона
+win.config(bg='#00FFC4') - второй способ задания фона через rgb
+win.title('Моё первое графическое приложение') - название окна
+win.geometry('500x600+100+200') - окно размером 500х600. 100 и 200 - выбираем место, где оно появится
+win.minsize(300, 400) - минимальная рамка для расширения
+win.maxsize(700, 800) - максималная рамка для расширения
+win.resizable(False, False) - нельзя ресайзить окно
+win.mainloop() - запускает само окно
+
+СОЗДАНИЕ ВИДЖЕТА
+
+label_1 = tk.Label(win, text='''Hello!
+world!''',
+                   bg='red',  - фон у лейбла
+                   fg='white',  - цвет текста
+                   font=('Arial', 15, 'bold'),  - шрифт, размер и обычный/жирный/курсив
+                   padx=10,  - отступ текста внутри лейбла по х
+                   pady=5,  - отступ текста внутри лейбла по у
+                   width=20,  - ширина лейбла (количество знаков)
+                   height=5,  - высота лейбла (количество знаков)
+                   anchor='n',  - ориентация текста внутри лейбла n-north, w-west и тд
+                   relief=tk.RAISED,  - берёт наш лейбл в рамку
+                   bd=10,  - толщина рамки
+                   justify=tk.LEFT  - выравнивание
+                   )
+label_1.pack()  - располагает элемент на экран
+
+СОЗДАНИЕ КНОПКИ
+
+def say_hello():
+    print('Hello!')
+
+
+def add_label():
+    label = tk.Label(win, text='new')
+    label.pack()
+
+
+def counter():
+    global count
+    count += 1
+    btn4['text'] = f'Counter: {count}'
+
+count = 0
+
+btn1 = tk.Button(win, text='Hello',
+                 command=say_hello
+                 )
+
+btn2 = tk.Button(win, text='Add new label',
+                 command=add_label
+                 )
+
+btn3 = tk.Button(win, text='Add new label lambda',
+                 command=lambda: tk.Label(win, text='new lambda').pack()
+                 )
+
+btn4 = tk.Button(win, text=f'Counter: {count}',
+                 command=counter,
+                 activebackground='blue',  # кнопка меняет цвет, когда на неё наводишь курсор
+                 bg='red',
+                state=tk.DISABLED  # кнопка неактивна
+                 )
+
+btn1.pack()
+btn2.pack()
+btn3.pack()
+btn4.pack()
+
+КНОПКИ С МЕТОДОМ GRID - помогает позиционировать кнопку
+
+btn1 = tk.Button(win, text='Hello 1')
+btn2 = tk.Button(win, text='Hello 2')
+btn3 = tk.Button(win, text='Hello 3')
+btn4 = tk.Button(win, text='Hello world')
+btn5 = tk.Button(win, text='Hello 5')
+btn6 = tk.Button(win, text='Hello 6')
+btn7 = tk.Button(win, text='Hello 7')
+btn8 = tk.Button(win, text='Hello 8')
+
+btn1.grid(row=0, column=0)
+btn2.grid(row=0, column=1, stick='we') - растягиваем кнопку в соответствии с большой батон 4
+btn3.grid(row=1, column=0)
+btn4.grid(row=1, column=1)
+btn5.grid(row=2, column=0)
+btn6.grid(row=2, column=1, stick='we') - растягиваем кнопку в соответствии с большой батон 4
+btn7.grid(row=3, column=0, columnspan=2, stick='we') - объединяем несколько колонок
+btn8.grid(row=0, column=2, rowspan=4, stick='ns') - объединяем несколько столбцов
+
+for i in range(5):
+    for j in range(2):
+        tk.Button(win,text=f'Hello {i} {j}').grid(row=i, column=j) - Тоже самое через цикл
+
+win.grid_columnconfigure(0, minsize=200) - минимальный сайз первой колонки
+win.grid_columnconfigure(1, minsize=100) - минимальный сайз второй колонки
+
+МЕТОДЫ GET, DELETE
+
+def get_entry():
+    value = name.get()
+    if value:
+        print(value)
+    else:
+        print('empty entry')
+
+
+def delete_entry():
+    name.delete(0, tk.END)
+
+
+def submit_entry():
+    print(name.get())
+    print(password.get())
+    delete_entry()
+    password.delete(0, tk.END)
+
+
+win = tk.Tk()
+
+win.title('Моё первое графическое приложение')
+win.geometry('400x500+100+200')
+
+tk.Label(win, text='Name').grid(row=0, column=0, stick='w')
+tk.Label(win, text='Password').grid(row=1, column=0, stick='w')
+name = tk.Entry(win)
+password = tk.Entry(win, show='*')
+name.grid(row=0, column=1)
+password.grid(row=1, column=1)
+
+tk.Button(win, text='get', command=get_entry).grid(row=2, column=0, stick='we')
+tk.Button(win, text='delete', command=delete_entry).grid(row=2, column=1, stick='we')
+tk.Button(win, text='submit', command=submit_entry).grid(row=3, column=0, stick='we')
+tk.Button(win, text='insert', command=lambda: name.insert(0, 'hello')).grid(row=2, column=2, stick='we')
